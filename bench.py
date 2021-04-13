@@ -16,7 +16,7 @@ def input_file(benchmark):
     return pre + ".in"
 
 
-def bench(passes: list[str]):
+def bench(passes: "list[str]"):
     passes = " ".join("-p {}".format(p) for p in passes)
     output_dir = "compiled_benchmarks"
     benchmarks = [f for f in os.listdir("benchmarks") if f.endswith(".lisp")]
