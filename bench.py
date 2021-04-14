@@ -46,12 +46,13 @@ def bench(passes: "list[str]"):
         if os.path.exists(input_path):
             stdin = open(input_path).read()
         for i in range(N):
-            start = time.time_ns()
+            start = time.perf_counter()
             subprocess.run(
-                run_cmd, input=stdin, shell=True, capture_output=True, text=True
+                run_cmd, input=stdin, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                universal_newlines=True
             )
-            end = time.time_ns()
-            runs.append(end - start)
+            end = time.perf_counter()
+            runs.append((end - start) * 10 ** 9)
         results[benchmark] = sum(runs) / len(runs)
     return results
 
@@ -78,9 +79,9 @@ def main():
     for name in config:
         results[name] = bench(config[name])
     writer = csv.writer(args.output)
-    for name in sorted(results.keys()):
-        for benchmark in sorted(results[name].keys()):
-            writer.writerow((name, benchmark, results[name][benchmark]))
+    for benchmark in sorted(results[name].keys()):
+        for name in sorted(results.keys()):
+            writer.writerow((benchmark, name, results[name][benchmark]))
 
 
 if __name__ == "__main__":
