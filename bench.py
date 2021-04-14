@@ -23,7 +23,7 @@ def bench(passes: "list[str]"):
 
     # First, compile all benchmarks
     for benchmark in benchmarks:
-        compile_cmd = "dune exec bin/compile.exe -- {} {} {}".format(
+        compile_cmd = "dune exec --root . bin/compile.exe -- {} {} {}".format(
             passes,
             os.path.join(os.path.relpath("benchmarks", start=".."), benchmark),
             os.path.relpath(output_dir, start=".."),
@@ -48,8 +48,12 @@ def bench(passes: "list[str]"):
         for i in range(N):
             start = time.perf_counter()
             subprocess.run(
-                run_cmd, input=stdin, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                universal_newlines=True
+                run_cmd,
+                input=stdin,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
             )
             end = time.perf_counter()
             runs.append((end - start) * 10 ** 9)
