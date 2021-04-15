@@ -1,0 +1,1 @@
+( let ((x (read-num) )) (+ (add1 (sub1 5)) (- (add1 (sub1 5)) (+ (add1 (sub1 5)) (sub1 (add1 (add1 (sub1 7)))) ))) )
