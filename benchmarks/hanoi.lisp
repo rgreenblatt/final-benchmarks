@@ -1,0 +1,27 @@
+(define (move-disk src des)
+    (pair
+        (right src)
+        (pair (left src) des))
+)
+
+(define (solve-hanoi n s d a)
+    (if (< 0 n)
+        (let ((src (left (solve-hanoi (sub1 n) s a d))))
+                (let ((aux (left (right (solve-hanoi (sub1 n) s a d)))))
+                    (let ((des (right (right (solve-hanoi (sub1 n) s a d)))))
+                        (let ((movedsd (move-disk src des)))
+                            (let ((res (solve-hanoi (sub1 n) aux (right movedsd) (left movedsd))))
+                                    (pair (right (right res)) (pair (left (right res)) (left res)))
+                    )))))
+        (pair s (pair d a))
+    )
+)
+
+(define (generate-hanoi n)
+    (if (< 0 n)
+        (pair n (generate-hanoi (sub1 n)))
+        ()
+    )
+)
+
+(print (solve-hanoi 11 (generate-hanoi 11) () ()))
